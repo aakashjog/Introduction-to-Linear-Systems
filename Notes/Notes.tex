@@ -66,6 +66,8 @@
 	\endgroup
 }
 
+\renewcommand{\marginfont}{\scriptsize \color{blue}}
+
 \renewcommand{\tilde}{\widetilde}
 
 \SetupExSheets{solution/print = true} %prints all solutions by default
@@ -137,7 +139,7 @@ McGraw Hill, 1995
 \begin{theorem}
 	Every linear system can be described by an ODE of the type
 	\begin{equation*}
-		y^{(n)} + a_{n - 1} y^{(n - 1)} + \dots + a_1 y^{(1)} + a_0 y &= b_m u^{(m)} + \dots + b_1 u^{(1)} + b_0 u
+		y^{(n)} + a_{n - 1} y^{(n - 1)} + \dots + a_1 y^{(1)} + a_0 y = b_m u^{(m)} + \dots + b_1 u^{(1)} + b_0 u
 	\end{equation*}
 	where $m < n$.
 	\label{representation_of_linear_system_by_ODE}
@@ -320,11 +322,11 @@ McGraw Hill, 1995
 		y(0^-)                    & = 0         \\
 		y-(0^-)                   & = 0
 	\end{align*}
-	The impulse response $y_{\delta}$ can be calculated by finding the response for the step function $y_{\delta_{-1}}_{\textnormal{ZSR}}(t)$, and then differentiating it.
+	The impulse response $y_{\delta}$ can be calculated by finding the response for the step function ${y_{\delta_{-1}}}_{\textnormal{ZSR}}(t)$, and then differentiating it.
 	\begin{align*}
-		y_{\delta_{-1}}_{\textnormal{ZSR}}(t)       & = \left( \frac{1}{6} - \frac{1}{2} e^{-2 t} + \frac{1}{3} e^{-3 t} \right) \delta_{-1}(t) \\
-		\therefore y_{\delta}_{\textnormal{ZSR}}(t) & = \dod{}{t} y_{\delta_{-1}}_{\textnormal{ZSR}}(t)                                         \\
-                                                            & = \left( e^{-2 t} - e^{-3 t} \right) \delta_{-1}(t) + \left( \frac{1}{6} - \frac{1}{2} e^{-2 t} + \frac{1}{3} e^{-3 t} \right) \delta(t)
+		{y_{\delta_{-1}}}_{\textnormal{ZSR}}(t)       & = \left( \frac{1}{6} - \frac{1}{2} e^{-2 t} + \frac{1}{3} e^{-3 t} \right) \delta_{-1}(t) \\
+		\therefore {y_{\delta}}_{\textnormal{ZSR}}(t) & = \dod{}{t} {y_{\delta_{-1}}}_{\textnormal{ZSR}}(t)                                       \\
+                                                              & = \left( e^{-2 t} - e^{-3 t} \right) \delta_{-1}(t) + \left( \frac{1}{6} - \frac{1}{2} e^{-2 t} + \frac{1}{3} e^{-3 t} \right) \delta(t)
 	\end{align*}
 	Else, the impulse response $y_{\delta}$ can be calculated by integrating the ODE around zero and finding the new initial conditions for $t = 0^+$.\\
 	Therefore,
@@ -348,5 +350,251 @@ McGraw Hill, 1995
 	\end{align*}
 	Similarly for $t > 0$.
 \end{solution}
+
+\section{Impulse Response}
+
+\subsection{Finding the General Solution for an ODE}
+
+		\begin{align*}
+			\sum\limits_{k = 0}^{n} a_k y^{(k)}(t) & = \sum\limits_{k = 0}^{m} b_k u^{(k)}(t) \\
+			y(0^-)                                 & = 0                                      \\
+			y^{(1)}(0^-)                           & = 0                                      \\
+                                                               & \vdots                                   \\
+			y^{(n - 1)}(0^-)                       & = 0
+		\end{align*}
+		where
+		\begin{align*}
+			u(t) = f(t) \delta_{-1}(t)
+		\end{align*}
+
+\begin{enumerate}
+	\color{red}
+	\item
+		Solve
+		\begin{align*}
+			\sum\limits_{k = 0}^{n} a_k y^{(k)}(t) & = u(t) \\
+			y(0^-)                                 & = 0    \\
+			y^{(1)}(0^-)                           & = 0    \\
+                                                               & \vdots \\
+			y^{(n - 1)}(0^-)                       & = 0
+		\end{align*}
+		where
+		\begin{align*}
+			u(t) = f(t) \delta_{-1}(t)
+		\end{align*}
+		\begin{enumerate}
+			\color{blue}
+			\item
+				Solve
+				\begin{align*}
+					\sum\limits_{k = 0}^{n} a_k y^{(k)}(t) & = \delta(t) \\
+					y(0^-)                                 & = 0         \\
+					y^{(1)}(0^-)                           & = 0         \\
+                                                                               & \vdots      \\
+					y^{(n - 1)}(0^-)                       & = 0
+				\end{align*}
+				where
+				\begin{align*}
+					u(t) & = f(t) \delta_{-1}(t)
+				\end{align*}
+				\begin{enumerate}
+					\color{green}
+					\item
+						Solve
+						\begin{align*}
+							\sum\limits_{k = 0}^{n} a_k y^{(k)}(t) & = 0    \\
+							y(0^-)                                 & = 0    \\
+							y^{(1)}(0^-)                           & = 0    \\
+                                                                                               & \vdots \\
+							y^{(n - 2)}(0^-)                       & = 0    \\
+							y^{(n - 1)}(0^-)                       & = \frac{1}{a_n}
+						\end{align*}
+					\item
+						Let this solution be $y_{\delta}$
+				\end{enumerate}
+		\end{enumerate}
+	\item
+		Let this solution be $y(t)$.\\
+		Therefore,
+		\begin{align*}
+			y_f(t) &= \int\limits_{0}^{t} f(\tau) y_{\delta}(t - \tau) \dif \tau
+		\end{align*}
+	\item
+		The solution for
+		\begin{align*}
+			\sum\limits_{k = 0}^{n} a_k y^{(k)}(t) & = \sum\limits_{k = 0}^{m} b_k u^{(k)} \\
+			y(0^-)                                 & = 0                                   \\
+			y^{(1)}(0^-)                           & = 0                                   \\
+                                                               & \vdots                                \\
+			y^{(n - 1)}(0^-)                       & = 0
+		\end{align*}
+		where
+		\begin{align*}
+			u(t) & = f(t) \delta_{-1}(t)
+		\end{align*}
+		is
+		\begin{align*}
+			y_{\textnormal{ZSR}}(t) & = \sum\limits_{k = 0}^{n} b_k {y_f}^{(k)}(t)
+		\end{align*}
+\end{enumerate}
+
+\begin{definition}[Convolution]
+	\begin{align*}
+		h(t) \ast f(t) & = \int\limits_{-\infty}^{\infty} h(\tau) f(t - \tau) \dif \tau \\
+                               & = \int\limits_{-\infty}^{\infty} h(t - \tau) f(\tau) \dif \tau
+	\end{align*}
+\end{definition}
+
+\begin{theorem}
+	If
+	\begin{align*}
+		h(t < 0) & = 0 \\
+		f(t < 0) & = 0
+	\end{align*}
+	then
+	\begin{align*}
+		h(t) \ast f(t) & = \int\limits_{0}^{t} h(\tau) f(t - \tau) \dif \tau \\
+                               & = \int\limits_{0}^{t} h(t - \tau) f(\tau) \dif \tau
+	\end{align*}
+\end{theorem}
+
+\begin{question}
+	Let
+	\begin{align*}
+		h(t) & = \left( A e^{-\alpha t} + B e^{-\beta t} \right) \delta_{-1}(t) \\
+		f(t) & = \sin(a t) \delta_{-1}(t)
+	\end{align*}
+	Find $h(t) \ast f(t)$.
+\end{question}
+
+\begin{solution}
+	\begin{align*}
+		h(t) \ast f(t) & = \int\limits_{0}^{t} h(t - \tau) f(\tau) \dif \tau \\
+                               & = \int\limits_{0}^{t} \left( A e^{-\alpha (t - \tau)} + B e^{-\beta (t - \tau) } \right) \sin(\alpha t) \dif \tau
+	\end{align*}
+\end{solution}
+
+\section{Laplace Transform}
+
+\begin{definition}[One-sided Laplace transform]
+	\begin{align*}
+		\mathcal{L}\left\{ y(t) \right\} & = \int\limits_{0^-}^{\infty} y(t) e^{-s t}\dif t \\
+                                                 & = Y(s)
+	\end{align*}
+\end{definition}
+
+\begin{theorem}
+	If $f(0^-) = 0$,
+	\begin{align*}
+		\mathcal{L}\left\{ f^{(n)}(t) \right\} & = s^n F(s)
+	\end{align*}
+	If $f(0^-) \neq 0$,
+	\begin{align*}
+		\mathcal{L}\left\{ f^{(n)}(t) \right\} & = s^n F(s) - \sum\limits_{i = 1}^{n} s^{n - i} f^{(i - 1)}(0)
+	\end{align*}
+\end{theorem}
+
+\begin{theorem}
+	If
+	\begin{align*}
+		F(s) & = \mathcal{L}\left\{ f(t) \right\}
+	\end{align*}
+	~\\
+	\begin{table}[H]
+		\begin{tabular}{|l|l|}
+			\hline
+			$f(t)$ & $F(s)$\\
+			\hline
+			$\delta(t)$ & $1$\\
+			$\delta(t - t_0)$ & $e^{-s t_0}$\\
+			$\delta_{-1}(t)$ & $\frac{1}{s}$\\
+			$e^{-a t} \delta_{-1}(t)$ & $\frac{1}{s + a}$\\
+			\hline
+		\end{tabular}
+	\end{table}
+\end{theorem}
+
+\begin{question}
+	Solve
+	\begin{align*}
+		y'' + 5 y' + 6 y & = u(t) + 2 u'(t) \\
+		y(0^-)           & = 1              \\
+		y'(0^-)          & = 2
+	\end{align*}
+	where
+	\begin{align*}
+		u(t) & = \delta_{-1}(t)
+	\end{align*}
+\end{question}
+
+\begin{solution}
+	\begin{align*}
+		y'' + 5 y' + 6 y                                        & = u(t) + 2 u'(t) \\
+		\therefore \mathcal{L}\left\{ y'' + 5 y' + 6 y \right\} & = \mathcal{L}\left\{ u(t) + 2 u'(t) \right\}
+	\end{align*}
+	Therefore,
+	\begin{align*}
+		2 \left( s U(s) - u(0) \right)               & = s^2 Y(s) - s y(0^-) - y'(0^-) + 5 \left( s Y(s) - y(0^-) \right) + 6 Y(s) \\
+		\therefore Y(s) \left( s^2 + 5 s + 6 \right) & = U(s) \left( 2 s + 1 \right) + s y(0^-) + 5 y(0^-) - 2 u(0^-)
+	\end{align*}
+	Therefore,
+	\begin{align*}
+		Y(s) & = \frac{2 s + 1}{(s + 2) (s + 3)} U(s) + \frac{s + 7}{(s + 2) (s + 3)} \\
+                     & = \frac{2 s + 1}{s (s + 2) (s + 3)} + \frac{s + 7}{(s + 2) (s + 3)}
+		\marginnote
+		{
+			As $u(t) = \delta_{-1}(t)$, $U(s) = \frac{1}{s}$
+		}
+	\end{align*}
+	Let
+	\begin{align*}
+		%Y_{\textnormal{ZSR}}(s) & = \frac{A}{s} + \frac{B}{s + 2} + \frac{C}{s + 3}
+	\end{align*}
+	Therefore, solving,
+	\begin{align*}
+		A & = \frac{1}{6} \\
+		B & = \frac{3}{2} \\
+		C & = -\frac{5}{3}
+	\end{align*}
+	Therefore,
+	\begin{align*}
+		%Y_{\textnormal{ZSR}}(s) & = \frac{\frac{1}{6}}{s} + \frac{\frac{3}{2}}{s + 2} - \frac{\frac{5}{3}}{s + 3}
+	\end{align*}
+	Therefore,
+	\begin{align*}
+		%y_{\textnormal{ZSR}}(t) & = \frac{1}{6} \delta_{-1}(t) + \frac{3}{2} e^{-2 t} \delta_{-1}(t) - \frac{5}{3} e^{-3 t} \delta_{-1}(t)
+	\end{align*}
+\end{solution}
+
+\begin{theorem}
+	Let
+	\begin{align*}
+		F(s) & = \frac{A_0}{(s - \lambda)^q} + \frac{A_1}{(s - \lambda)^{q - 1}} + \dots + \frac{A_{q - 1}}{s - \lambda}
+	\end{align*}
+	Then
+	\begin{align*}
+		A_k & = \frac{1}{k!} \left. \dod[k]{}{s}\left( Q(s) \right) \right|_{s = \lambda}
+	\end{align*}
+	where
+	\begin{align*}
+		k    & \in \left\{ 0 , \dots , q - 1 \right\} \\
+		Q(s) & = (s - \lambda)^q F(s)
+	\end{align*}
+\end{theorem}
+
+\begin{theorem}
+	The solution of
+	\begin{align*}
+		\sum\limits_{k = 0}^{n} a_k y^{(k)} & = \sum\limits_{k = 0}^{m} b_k u^{(k)}
+	\end{align*}
+	where
+	\begin{align*}
+		u(t) & = f(t) \delta_{-1}(t)
+	\end{align*}
+	is
+	\begin{align*}
+		Y(s) & = \underbrace{\underbrace{\frac{B(s)}{A(s)}}_{\text{transfer function}} U(s)}_{\text{contribution of the input}} + \underbrace{\frac{Q(s)}{A(s)}}_{\text{contribution of the initial conditions}}
+	\end{align*}
+\end{theorem}
 
 \end{document}
