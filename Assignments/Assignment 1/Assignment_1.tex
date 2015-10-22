@@ -1,0 +1,794 @@
+\documentclass[fleqn, a4paper, 11pt, oneside]{amsart}
+%\usepackage[top = 2cm, bottom = 1cm, left = 1cm, right = 1cm]{geometry}
+\usepackage{exsheets, tasks}
+\usepackage{amsmath, amssymb, amsthm} %standard AMS packages
+\usepackage{marginnote} %marginnotes
+\usepackage{gensymb} %miscellaneous symbols
+\usepackage{commath} %differential symbols
+\usepackage{xcolor} %colours
+\usepackage{cancel} %cancelling terms
+\usepackage[free-standing-units, space-before-unit]{siunitx} %formatting units
+\usepackage{tikz, pgfplots} %diagrams
+\usetikzlibrary{calc, hobby, patterns, intersections, decorations.markings}
+\usepackage{graphicx} %inserting graphics
+\usepackage{hyperref} %hyperlinks
+\usepackage{datetime} %date and time
+\usepackage{ulem} %underline for \emph{}
+\usepackage{xfrac} %inline fractions
+\usepackage{enumerate,enumitem} %numbered lists
+\usepackage{float} %inserting floats
+\usepackage{circuitikz}[american voltages, american currents] %circuit diagrams
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}} %adds numbers to specific equations in non-numbered list of equations
+
+\newcommand{\AxisRotator}[1][rotate=0]{
+	\tikz [x=0.25cm,y=0.60cm,line width=.2ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+} %rotation symbols on axes
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\curl}{\mathrm{curl\,}}
+
+\makeatletter
+\@addtoreset{section}{part} %resets section numbers in new part
+\makeatother
+
+\renewcommand{\thesubsection}{(\arabic{subsection})}
+\renewcommand{\thesection}{(\arabic{section})}
+
+%section headings on left
+\makeatletter
+\def\specialsection{\@startsection{section}{1}%
+	\z@{\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\centering}}% DELETED
+	{\normalfont}}% NEW
+\def\section{\@startsection{section}{1}%
+	\z@{.7\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\scshape\centering}}% DELETED
+	{\normalfont\scshape}}% NEW
+\makeatother
+
+%forces newline after subsection
+\makeatletter
+\def\subsection{\@startsection{subsection}{3}%
+	\z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+	{\normalfont\itshape}}
+\makeatother
+
+\settasks{counter-format = tsk[1].}
+
+\SetupExSheets{solution/print = true}
+
+%opening
+\title{Introduction to Linear Systems : Assignment 1}
+\author
+{
+	Aakash Jog\\
+	ID : 989323563
+}
+\date{\formatdate{22}{10}{2015}}
+
+\begin{document}
+
+\tikzset{->-/.style={decoration={
+  markings,
+  mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
+
+\maketitle
+%\setlength{\mathindent}{0pt}
+
+\begin{question}
+	Consider the following system:
+	\begin{align*}
+		y^{(2)}(t) + 3 y^{(1)}(t) + 2 y(t) & = u^{(1)}(t) + 3 u(t) \\
+		y(0^-)                             & = 1                   \\
+		y^{(1)}(0^-)                       & = 1
+	\end{align*}
+	\begin{enumerate}
+		\item
+			Find the homogeneous solution.
+		\item
+			Find the system's impulse response, $g(t)$.
+		\item
+			Find the system's total response for the input $f(t) = \sin(2 t) \delta_{-1}(t)$.
+			Hint: $\int\limits_{0}^{t} e^{a \tau} \sin(b \tau) \dif \tau = \frac{e^{a t} \left( a \sin(b t) - b \cos(b t) \right)}{a^2 + b^2} + \frac{b}{a^2 + b^2}$.
+		\item
+			Find the particular solution for the input $f(t) = \left( 4 \sin(2 t) + \frac{1}{2} \cos(2 t) \right) \delta_{-1}(t)$.
+	\end{enumerate}
+\end{question}
+
+\begin{solution}
+	\begin{enumerate}[leftmargin = *]
+		\item
+			The corresponding homogeneous ODE is
+			\begin{align*}
+				y''(t) + 3 y'(t) + 2 y(t) & = 0
+			\end{align*}
+			Therefore, the characteristic equation is
+			\begin{align*}
+				\lambda^2 + 3 \lambda + 2 & = 0
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\lambda & = \frac{-3 \pm \sqrt{9 - 8}}{2}
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\lambda_1 & = -1 \\
+				\lambda_2 & = -2
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_1 & = e^{-t} \\
+				y_2 & = e^{-2 t}
+			\end{align*}
+			Therefore, the homogeneous solution is
+			\begin{align*}
+				y_h(t) & = A e^{-t} + B e^{-2 t}
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				{y_h}'(t) & = -A e^{-t} - 2 B e^{-2 t}
+			\end{align*}
+			Substituting the initial conditions,
+			\begin{align*}
+				1 & = A + B \\
+				1 & = -A - 2 B
+			\end{align*}
+			Therefore, solving,
+			\begin{align*}
+				A & = 3 \\
+				B & = -2
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_h(t) & = \left( 3 e^{-t} - 2 e^{-2 t} \right) \delta_{-1}(t)
+			\end{align*}
+		\item
+			The corresponding homogeneous ODE is
+			\begin{align*}
+				y''(t) + 3 y'(t) + 2 y(t) & = 0
+			\end{align*}
+			Therefore, the characteristic equation is
+			\begin{align*}
+				\lambda^2 + 3 \lambda + 2 & = 0
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\lambda & = \frac{-3 \pm \sqrt{9 - 8}}{2}
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\lambda_1 & = -1 \\
+				\lambda_2 & = -2
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_1 & = e^{-t} \\
+				y_2 & = e^{-2 t}
+			\end{align*}
+			Therefore, the homogeneous solution is
+			\begin{align*}
+				y_{\delta} & = A e^{-t} + B e^{-2 t}
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				{y_{\delta}}' & = -A e^{-t} - 2 B e^{-2 t}
+			\end{align*}
+			As the input is a delta function, the initial conditions are
+			\begin{align*}
+				y_{\delta}(0^+)         & = 0 \\
+				{y_{\delta}}^{(1)}(0^+) & = 1
+			\end{align*}
+			Therefore, substituting,
+			\begin{align*}
+				0 & = A + B \\
+				1 & = -A - 2 B
+			\end{align*}
+			Therefore, solving,
+			\begin{align*}
+				A & = 1 \\
+				B & = -1
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_{\delta}(t)               & = e^{-t} - e^{-2 t} \\
+				\therefore {y_{\delta}}'(t) & = -e^{-t} + 2 e^{-2 t}
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				g(t) & = {y_{\delta}}'(t) + 3 y_{\delta}(t) \\
+                                     & = \left( 2 e^{-t} - e^{-2 t} \right) \delta_{-1}(t)
+			\end{align*}
+		\item
+			\begin{align*}
+				y_p(t) & = g(t) \ast f(t)                                                                                                                                                 \\
+                                       & = \int\limits_{-\infty}^{\infty} g(t - \tau) f(\tau) \dif \tau                                                                                                   \\
+                                       & = \int\limits_{0}^{t} \left( 2 e^{-(t - \tau)} - e^{-2(t - \tau)} \right) \sin(2 \tau) \dif \tau                                                                 \\
+                                       & = 2 e^{-t} \int\limits_{0}^{t} e^{\tau} \sin(2 \tau) \dif \tau - e^{-2 t} \int\limits_{0}^{t} e^{2 \tau} \sin(2 \tau) \dif \tau                                  \\
+                                       & = \quad 2 e^{-t} \left( \frac{e^t \left( \sin(2 t) - 2 \cos(2 t) \right)}{1^2 + 2^2} + \frac{2}{1^2 + 2^2} \right)                                               \\
+                                       & \quad - e^{-2 t} \left( \frac{e^{2 t} \left( 2 \sin(2 t) - 2 \cos(2 t) \right)}{2^2 + 2^2} + \frac{2}{2^2 + 2^2} \right)                                         \\
+                                       & = \frac{2}{5} \left( \sin(2 t) - 2 \cos(2 t) + \frac{4}{5}e^{-t} \right) - \left( \frac{1}{4}\left( \sin(2 t) - \cos(2 t) \right) + \frac{1}{4} e^{-2 t} \right) \\
+                                       & = \left( \frac{3}{20} \sin(2 t) - \frac{11}{20} \cos(2 t) + \frac{4}{5} e^{-t} - \frac{1}{4} e^{-2 t} \right)
+			\end{align*}
+			Therefore, the particular solution is
+			\begin{align*}
+				y_p(t) & = \left( \frac{3}{20} \sin(2 t) - \frac{11}{20} \cos(2 t) + \frac{4}{5} e^{-t} - \frac{1}{4} e^{-2 t} \right) \delta_{-1}(t)
+			\end{align*}
+			Therefore, the total solution is
+			\begin{align*}
+				y(t) & = y_h(t) + y_p(t)                                                                                                                                                                  \\
+                                     & = \left( 3 e^{-t} - 2 e^{-2 t} \right) \delta_{-1}(t) + \left( \frac{3}{20} \sin(2 t) - \frac{11}{50} \cos(2 t) + \frac{4}{5} e^{-t} - \frac{1}{4} e^{-2 t} \right) \delta_{-1}(t) \\
+                                     & = \left( \frac{3}{20} \sin(2 t) - \frac{11}{20} \cos(2 t) + \frac{19}{5} e^{-t} - \frac{9}{4} e^{-2 t} \right) \delta_{-1}(t)
+			\end{align*}
+		\item
+			\begin{align*}
+				f(t) & = 4 \sin(2 t) + \frac{1}{2} \cos(2 t) \\
+                                     & = 4 \sin(2 t) + \frac{1}{4} {\sin(2 t)}'
+			\end{align*}
+			Let $y_{p_1}$ be the particular solution for the input $\sin(2 t)$.\\
+			Therefore,
+			\begin{align*}
+				y_{p_1}(t)               & = \left( \frac{3}{20} \sin(2 t) - \frac{11}{20} \cos(2 t) + \frac{4}{5} e^{-t} - \frac{1}{4} e^{2 t} \right) \delta_{-1}(t) \\
+				\therefore {y_{p_1}}'(t) & = \left( \frac{3}{10} \cos(2 t) + \frac{11}{20} \sin(2 t) - \frac{4}{5} e^{-t} + \frac{1}{2} e^{-2 t} \right)
+			\end{align*}
+			Let $y_{p_2}$ be the particular solution for the input $f(t) = 4 \sin(2 t) + \frac{1}{2} \cos(2 t)$.\\
+			Therefore,
+			\begin{align*}
+				y_{p_2}(t) & = 4 y_{p_1}(t) + \frac{1}{4} {y_{p_1}}'(t)                                                                                      \\
+                                           & = \quad 4 \left( \frac{3}{20} \sin(2 t) - \frac{11}{20} \cos(2 t) + \frac{4}{5} e^{-t} - \frac{1}{4}e^{-2 t} \right)            \\
+                                           & \quad + \frac{1}{4} \left( \frac{3}{10} \cos(2 t) + \frac{11}{20} \sin(2 t) - \frac{4}{5} e^{-t} + \frac{1}{2} e^{-2 t} \right) \\
+                                           & = \frac{7}{8} \sin(2 t) - \frac{17}{8} \cos(2 t) + 3 e^{-t} - \frac{7}{8} e^{-2 t}
+			\end{align*}
+			Therefore, the particular solution is
+			\begin{align*}
+				y_{p_2}(t) & = \frac{7}{8} \sin(2 t) - \frac{17}{8} \cos(2 t) + 3 e^{-t} - \frac{7}{8} e^{-2 t}
+			\end{align*}
+			Therefore, the total solution is
+			\begin{align*}
+				y(t) & = y_h + y_{p_2}(t)                                                                                                                                                     \\
+                                     & = \left( 3 e^{-t} - 2 e^{-2 t} \right) \delta_{-1}(t) + \left( \frac{7}{8} \sin(2 t) - \frac{17}{8} \cos(2 t) + 3 e^{-t} - \frac{7}{8} e^{-2 t} \right) \delta_{-1}(t) \\
+                                     & = \left( \frac{7}{8} \sin(2 t) - \frac{17}{8} \cos(2 t) + 6 e^{-t} - \frac{23}{8} e^{-2 t} \right) \delta_{-1}(t)
+			\end{align*}
+	\end{enumerate}
+\end{solution}
+
+\begin{question}
+	A linear system is given by the following ODE
+	\begin{align*}
+		y^{(2)}(t) + a y^{(1)}(t) + b y(t) & = 3 u^{(1)}(t) + 5 u(t)
+	\end{align*}
+	It is known that the system's response to the initial conditions' response is
+	\begin{align*}
+		y_h(t) & = \left( 2 e^{-t} + 4 e^{-5 t} \right) \delta_{-1}(t)
+	\end{align*}
+	\begin{enumerate}
+		\item
+			Find the values of $a$ and $b$.
+		\item
+			What are the system's initial conditions at $t = 0^-$?
+		\item
+			Irrespective of what you found so far, assume from here and on that $a = 6$, $b = 5$, and that the initial conditions are 
+			\begin{align*}
+				y(0^-)       & = 0 \\
+				y^{(1)}(0^-) & = 1
+			\end{align*}
+			Find the system's total response to an impulse input.
+		\item
+			Find the system's total response for a unit step input.
+	\end{enumerate}
+\end{question}
+
+\begin{solution}
+	\begin{enumerate}[leftmargin=*]
+		\item
+			As the homogeneous solution is
+			\begin{align*}
+				y_h(t) & = \left( 2 e^{-t} + 4 e^{-5 t} \right) \delta_{-1}(t)
+			\end{align*}
+			the roots of the characteristic equation are
+			\begin{align*}
+				\lambda_1 & = -1 \\
+				\lambda_2 & = -5
+			\end{align*}
+			Therefore, the characteristic equation is
+			\begin{align*}
+				(\lambda - \lambda_1) (\lambda - \lambda_2) & = 0 \\
+				\therefore (\lambda + 1) (\lambda + 5)      & = 0 \\
+				\therefore \lambda^2 + 6 \lambda + 5        & = 0
+			\end{align*}
+			Therefore, the homogeneous ODE is
+			\begin{align*}
+				y^{(2)}(t) + 6 y^{(1)}(t) + 5 y(t) & = 0
+			\end{align*}
+			Therefore, comparing,
+			\begin{align*}
+				a & = 6 \\
+				b & = 5
+			\end{align*}
+		\item
+			The system's inital conditions' response is
+			\begin{align*}
+				y_h(t)               & = \left( 2 e^{-t} + 4 e^{-5 t} \right) \delta_{-1}(t) \\
+				\therefore {y_h}'(t) & = \left( -2 e^{-t} - 20 e^{-5 t} \right) \delta_{-1}(t)
+			\end{align*}
+			Therefore, substituting the initial conditions,
+			\begin{align*}
+				y_h(0^+)         & = y_h(0^-)         \\
+                                                 & = 2 + 4            \\
+                                                 & = 6                \\
+				{y_h}^{(1)}(0^+) & = {y_h}^{(1)}(0^-) \\
+                                                 & = -2 - 20          \\
+                                                 & = -22
+			\end{align*}
+		\item
+			The homogeneous ODE is
+			\begin{align*}
+				y^{(2)}(t) + 6 y^{(1)}(t) + 5 y(t) & = 0
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\lambda_1 & = -1 \\
+				\lambda_2 & = -5
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_{\delta}(t)                    & = A e^{-t} + B e^{-5 t} \\
+				\therefore {y_{\delta}}^{(1)}(t) & = -A e^{-t} - 5 B e^{-5 t}
+			\end{align*}
+			As the input is a delta function
+			\begin{align*}
+				y_{\delta}(0)         & = 0 \\
+				{y_{\delta}}^{(1)}(0) & = 1
+			\end{align*}
+			Therefore, substituting
+			\begin{align*}
+				0 & = A + B \\
+				1 & = -A - 5 B
+			\end{align*}
+			Therefore, solving
+			\begin{align*}
+				A & = \frac{1}{4} \\
+				B & = -\frac{1}{4}
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_{\delta}(t)                    & = \frac{1}{4} e^{-t} - \frac{1}{4} e^{-5 t} \\
+				\therefore {y_{\delta}}^{(1)}(t) & = -\frac{1}{4} e^{-t} + \frac{5}{4} e^{-5 t}
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				g(t) & = 3 {y_{\delta}}^{(1)}(t) + 5 y_{\delta}(t)                                               \\
+                                     & = -\frac{3}{4} e^{-t} + \frac{15}{4} e^{-5 t} + \frac{5}{4} e^{-t} - \frac{5}{4} e^{-5 t} \\
+                                     & = \frac{1}{2} e^{-t} + \frac{5}{2} e^{-5 t}
+			\end{align*}
+		\item
+			\begin{align*}
+				y_h(t)                    & = A e^{-t} + B e^{-5 t} \\
+				\therefore {y_h}^{(1)}(t) & = -A e^{-t} - 5 B e^{-5 t}
+			\end{align*}
+			Therefore, substituting the initial values,
+			\begin{align*}
+				0 & = A + B \\
+				1 & = -A - 5 B
+			\end{align*}
+			Therefore, solving,
+			\begin{align*}
+				A & = \frac{1}{4} \\
+				B & = -\frac{1}{4}
+			\end{align*}
+			Therefore, the homogeneous solution is
+			\begin{align*}
+				y_h(t) & = \left( \frac{1}{4} e^{-t} - \frac{1}{4} e^{-5 t} \right) \delta_{-1}(t)
+			\end{align*}
+			The system's impulse response is
+			\begin{align*}
+				g(t) & = \left( \frac{1}{2} e^{-t} + \frac{5}{2} e^{-5 t} \right) \delta_{-1}(t)
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_p(t) & = g(t) \ast u(t)                                                                               \\
+                                       & = \int\limits_{0}^{t} \left( \frac{1}{2} e^{-\tau} + \frac{5}{2} e^{-5 \tau} \right) \dif \tau \\
+                                       & = \left. -\frac{1}{2} e^{-t} \right|_{0}^{t} - \left. \frac{1}{2} e^{-5 t} \right|_{0}^{t}     \\
+                                       & = -\frac{1}{2} \left( e^{-t} - 1 \right) - \frac{1}{2} \left( e^{-5 t} - 1 \right)             \\
+                                       & = -\frac{1}{2} e^{-t} - \frac{1}{2} e^{-5 t} + 1
+			\end{align*}
+			Therefore, the particular solution is
+			\begin{align*}
+				y_p(t) & = \left( -\frac{1}{2} e^{-t} - \frac{1}{2} e^{-5 t} + 1 \right) \delta_{-1}(t)
+			\end{align*}
+			Therefore, the total solution is
+			\begin{align*}
+				y(t) & = y_h(t) + y_p(t)                                                                                                                                        \\
+                                     & = \left( \frac{1}{4} e^{-t} - \frac{1}{4} e^{-5 t} \right) \delta_{-1}(t) + \left( -\frac{1}{2} e^{-t} - \frac{1}{2} e^{-5 t} + 1 \right) \delta_{-1}(t) \\
+                                     & = \left( -\frac{1}{4} e^{-t} - \frac{3}{4} e^{-5 t} + 1 \right) \delta_{-1}(t)
+			\end{align*}
+	\end{enumerate}
+\end{solution}
+
+\begin{question}
+	Consider the system given by
+	\begin{align*}
+		y^{(2)}(t) + 6 y^{(1)}(t) + 5 y(t) & = u^{(1)}(t) + 4 u(t) \\
+		y(0^-)                             & = 1                   \\
+		y^{(1)}(0^-)                       & = -1
+	\end{align*}
+	\begin{enumerate}
+		\item
+			Find the homogeneous solution.
+		\item
+			Find the system's impulse response.
+		\item
+			Find the system's total response for the input $f(t) = \left( e^{-t} + 5 e^{-2 t} \right) \delta_{-1}(t)$.
+		\item
+			It is given that the system's total response for the input $f(t) = \left( A e^{-t} + B e^{-4 t} \right) \delta_{-1}(t)$ is $y(t) = e^{-t} \delta_{-1}(t)$.
+			Find the coefficients $A$ and $B$.
+	\end{enumerate}
+\end{question}
+
+\begin{solution}
+	\begin{enumerate}[leftmargin=*]
+		\item
+			\begin{align*}
+				y^{(2)}(t) + 6 y^{(1)}(t) + 5 y(t) & = u^{(1)}(t) + 4 u(t)
+			\end{align*}
+			Therefore, the corresponding homogeneous ODE is
+			\begin{align*}
+				y^{(2)}(t) + 6 y^{(1)}(t) + 5 y(t) & = 0
+			\end{align*}
+			Therefore, the characteristic equation is
+			\begin{align*}
+				\lambda^2 + 6 \lambda + 5 & = 0
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\lambda_1 & = -1 \\
+				\lambda_2 & = -5
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_1 & = e^{-t} \\
+				y_2 & = e^{-5 t}
+			\end{align*}
+			Therefore, the homogeneous solution is
+			\begin{align*}
+				y_h(t)               & = A e^{-t} + B e^{-5 t} \\
+				\therefore {y_h}'(t) & = -A e^{-t} - 5 B e^{-5 t}
+			\end{align*}
+			Substituting the initial conditions,
+			\begin{align*}
+				1  & = A + B \\
+				-1 & = -A - 5 B
+			\end{align*}
+			Therefore, solving,
+			\begin{align*}
+				A & = 1 \\
+				B & = 0
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_h(t) & = e^{-t} \delta_{-1}(t)
+			\end{align*}
+		\item
+			\begin{align*}
+				y^{(2)}(t) + 6 y^{(1)}(t) + 5 y(t) & = u^{(1)}(t) + 4 u(t)
+			\end{align*}
+			Therefore, the corresponding homogeneous ODE is
+			\begin{align*}
+				y^{(2)}(t) + 6 y^{(1)}(t) + 5 y(t) & = 0
+			\end{align*}
+			Therefore, the characteristic equation is
+			\begin{align*}
+				\lambda^2 + 6 \lambda + 5 & = 0
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\lambda_1 & = -1 \\
+				\lambda_2 & = -5
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_1 & = e^{-t} \\
+				y_2 & = e^{-5 t}
+			\end{align*}
+			Therefore, the homogeneous solution is
+			\begin{align*}
+				y_h(t)               & = A e^{-t} + B e^{-5 t} \\
+				\therefore {y_h}'(t) & = -A e^{-t} - 5 B e^{-5 t}
+			\end{align*}
+			As the input is a delta function,
+			\begin{align*}
+				y_{\delta}(0^+)    & = 0 \\
+				{y_{\delta}}'(0^+) & = 1
+			\end{align*}
+			Therefore, substituting,
+			\begin{align*}
+				0 & = A + B \\
+				1 & = -A - 5 B
+			\end{align*}
+			Therefore, solving,
+			\begin{align*}
+				A & = \frac{1}{4} \\
+				B & = -\frac{1}{4}
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_{\delta}(t)              & = \left( \frac{1}{4} e^{-t} - \frac{1}{4} e^{-5 t} \right) \delta_{-1}(t) \\
+				\therefore {y_{\delta}}(t) & = \left( -\frac{1}{4} e^{-t} + \frac{5}{4} e^{-5 t} \right) \delta_{-1}(t)
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				g(t) & = {y_{\delta}}'(t) + 4 y_{\delta}(t)                                                                                     \\
+                                     & = \left( -\frac{1}{4} e^{-t} + \frac{5}{4} e^{-5 t} \right) + 4 \left( \frac{1}{4} e^{-t} - \frac{1}{4} e^{-5 t} \right) \\
+                                     & = \frac{3}{4} e^{-t} + \frac{1}{4} e^{-5 t}
+			\end{align*}
+			Therefore, the system's total impulse response is
+			\begin{align*}
+				g(t) & = \left( \frac{3}{4} e^{-t} + \frac{1}{4} e^{-5 t} \right) \delta_{-1}(t)
+			\end{align*}
+		\item
+			\begin{align*}
+				y_p(t) & = g(t) \ast u(t)                                                                                                                                                                           \\
+                                       & = \int\limits_{0}^{t} \left( \frac{3}{4} e^{-(t - \tau)} + \frac{1}{4} e^{-5(t - \tau)} \right) \left( e^{-\tau} + 5 e^{-2 \tau} \right) \dif \tau                                         \\
+                                       & = \frac{3}{4} e^{-t} \int\limits_{0}^{t} \left( 1 + 5 e^{-t} \right) \dif \tau + \frac{1}{4} e^{-5 t} \int\limits_{0}^{t} \left( e^{4 \tau} + 5 e^{3 \tau} \right) \dif \tau               \\
+                                       & = \frac{3}{4} e^{-t} \left. \left( \tau - 5 e^{-\tau} \right) \right|_{0}^{t} + \frac{1}{4} e^{-5 t} \left. \left( \frac{1}{4} e^{4 \tau} + \frac{5}{3} e^{3 \tau} \right) \right|_{0}^{t} \\
+                                       & = \frac{3}{4} e^{-t} \left( t - 5 e^{-t} + 5 \right) + \frac{1}{4} e^{-5 t} \left( \frac{1}{4} e^{4 t} + \frac{5}{3} e^{3 t} - \left( \frac{1}{4} + \frac{5}{3} \right) \right)            \\
+                                       & = \frac{61}{16} e^{-t} + \frac{3}{4} t e^{-t} - \frac{10}{3} e^{-2 t} - \frac{23}{48} e^{-5 t}
+			\end{align*}
+			Therefore, the particular solution is
+			\begin{align*}
+				y_p(t) & = \left( \frac{61}{16} e^{-t} + \frac{3}{4} t e^{-t} - \frac{10}{3} e^{-2 t} - \frac{23}{48} e^{-5 t} \right) \delta_{-1}(t)
+			\end{align*}
+			Therefore, the total solution is
+			\begin{align*}
+				y(t) & = y_h(t) + y_p(t) \\
+                                     & = \left( \frac{77}{16} e^{-t} + \frac{3}{4} t e^{-t} - \frac{10}{3} e^{-2 t} - \frac{23}{48} e^{-5 t} \right) \delta_{-1}(t)
+			\end{align*}
+		\item
+			\begin{align*}
+				y(t)                             & = y_h(t) + y_p(t) \\
+				\therefore e^{-t} \delta_{-1}(t) & = e^{-t} \delta_{-1}(t) + y_p(t)
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_p(t)       & = g(t) \ast u(t)                                                                                                                                                                             \\
+				\therefore 0 & = \int\limits_{0}^{t} \left( \frac{3}{4} e^{-t} + \frac{1}{4} e^{-5 t} \right) \left( A e^{-(t - \tau)} + B e^{-4 (t - \tau)} \right) \dif \tau                                              \\
+                                             & = A e^{-t} \int\limits_{0}^{t} \left( \frac{3}{4} + \frac{1}{4} e^{-4 \tau} \right) + B e^{-4 t} \int\limits_{0}^{t} \left( \frac{3}{4} e^{3 \tau} + \frac{1}{4} e^{-\tau} \right) \dif \tau \\
+                                             & = A e^{-t} \left. \left( \frac{3}{4} \tau - \frac{1}{16} e^{-4 t} \right) \right|_{0}^{t} + B e^{-4 t} \left. \left( \frac{1}{4} e^{3 \tau} - \frac{1}{4} e^{- \tau} \right) \right|_{0}^{t} \\
+                                             & = A e^{-t} \left( \frac{3}{4} t - \frac{1}{16} e^{-4 t} + \frac{1}{16} \right) + B e^{-4 t} \left( \frac{1}{4} e^{3 t} - \frac{1}{4} e^{-t} \right)                                          \\
+                                             & = A \left( \frac{3}{4} t e^{-t} - \frac{1}{16} e^{-5 t} + \frac{1}{16} e^{-t} \right) + B \left( \frac{1}{4} e^{-t} - \frac{1}{4} e^{-5 t} \right)                                           \\
+                                             & = e^{-t} \left( \frac{1}{16} A \right) + t e^{-t} \left( \frac{3}{4} A \right) + e^{-5 t} \left( -\frac{1}{16} A - \frac{1}{4} B \right)
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\frac{1}{16} A                  & = 0 \\
+				\frac{3}{4} A                   & = 0 \\
+				-\frac{1}{16} A - \frac{1}{4} B & = 0
+			\end{align*}
+			Therefore, solving,
+			\begin{align*}
+				A & = 0 \\
+				B & = 0
+			\end{align*}
+	\end{enumerate}
+\end{solution}
+
+\begin{question}
+	It is given that the impulse response of system 1 is
+	\begin{align*}
+		g_1(t) & = \left( e^{-t} + e^{-2 t} \right) \delta_{-1}(t)
+	\end{align*}
+	It is given that system 1 is of minimal order, i.e. a minimal order system that satisfies the requirements.
+	\begin{enumerate}
+		\item
+			Find the ODE that represents system 1.
+		\item
+			It is now given that the initial conditions of system 1 are
+			\begin{align*}
+				y_1(0^-)         & = 2 \\
+				{y_1}^{(1)}(0^-) & = 1
+			\end{align*}
+			Find the unit step response of system 1.
+	\end{enumerate}
+	Another system, system 2, is given.
+	It is known that the particular solution of system 2 to a unit step input is
+	\begin{align*}
+		{y_p}_2(t) & = \left( -2 + e^{-t} + e^{-4 t} + t e^{-4 t} \right) \delta_{-1}(t)
+	\end{align*}
+	It is given that system 2 is of minimal order.
+	\begin{enumerate}[resume]
+		\item
+			Find the impulse response of system 2, $g_2(t)$.
+		\item
+			The initial conditions of system 2 are given to be
+			\begin{align*}
+				y_2(0^-)         & = 2 \\
+				{y_1}^{(1)}(0^-) & = 3 \\
+				{y_1}^{(2)}(0^-) & = 1
+			\end{align*}
+			Find the homogeneous solution of system 2.
+	\end{enumerate}
+\end{question}
+
+\begin{solution}
+	\begin{enumerate}[leftmargin=*]
+		\item
+			\begin{align*}
+				g_1(t) & = \left( e^{-t} + e^{-2 t} \right) \delta_{-1}(t)
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\lambda_1 & = -1 \\
+				\lambda_2 & = -2
+			\end{align*}
+			Therefore, the characteristic equation is
+			\begin{align*}
+				(\lambda - \lambda_1) (\lambda - \lambda_2) & = 0 \\
+				\therefore \lambda^2 + 3 \lambda + 2        & = 0
+			\end{align*}
+			Therefore, the corresponding homogeneous ODE is
+			\begin{align*}
+				{y_1}''(t) + 3 {y_1}'(t) + 2 y_1(t) & = 0
+			\end{align*}
+			Therefore, the ODE is
+			\begin{align*}
+				{y_1}''(t) + 3 {y_1}'(t) + 2 y_1(t) & = b_1 {u_1}'(t) + b_0 u(t)
+			\end{align*}
+			For $y_{\delta}$, the initial conditions are
+			\begin{align*}
+				y_{\delta}(0^+)    & = 0 \\
+				{y_{\delta}}'(0^+) & = 1
+			\end{align*}
+			Therefore, solving for $y_{\delta}$,
+			\begin{align*}
+				{y_{\delta}}''(t) + 3 {y_{\delta}}'(t) + 2 y_{\delta}(t) & = 0 \\
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_{\delta}(t)    & = A e^{-t} + B e^{-2 t} \\
+				{y_{\delta}}'(t) & = -A e^{-t} - 2 B e^{-2 t}
+			\end{align*}
+			Therefore, substituting the initial conditions,
+			\begin{align*}
+				0 & = A + B \\
+				1 & = -A - 2 B
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				A & = 1 \\
+				B & = -1
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_{\delta}(t)               & = e^{-t} - e^{-2 t} \\
+				\therefore {y_{\delta}}'(t) & = -e^{-t} + 2 e^{-2 t}
+			\end{align*}
+			As $g_1(t)$ is the impulse response,
+			\begin{align*}
+				g_1(t) & = b_1 {y_{\delta}}'(t) + b_0 y_{\delta}(t)                                       \\
+                                       & = b_1 \left( -e^{-t} + 2 e^{-2 t} \right) + b_0 \left( e^{-t} - e^{-2 t} \right) \\
+                                       & = e^{-t} (b_0 - b_1) + e^{-2 t} (2 b_1 - b_0)
+			\end{align*}
+			Therefore, comparing with the given impulse response,
+			\begin{align*}
+				b_0 - b_1   & = 1 \\
+				2 b_1 - b_0 & = 1
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				b_0 & = 3 \\
+				b_1 & = 2
+			\end{align*}
+			Therefore, the ODE is
+			\begin{align*}
+				{y_1}''(t) + 3 {y_1}'(t) + 2 y_1(t) & = 2 {u_1}'(t) + 3 u(t)
+			\end{align*}
+		\item
+			\begin{align*}
+				{y_1}''(t) + 3 {y_1}'(t) + 2 y_1(t) & = 2 {u_1}'(t) + 3 u(t) \\
+				y_1(0^-)                            & = 2                    \\
+				{y_1}'(0^-)                         & = 1
+			\end{align*}
+			Therefore, the homogeneous ODE is
+			\begin{align*}
+				{y_1}''(t) + 3 {y_1}'(t) + 2 y_1(t) & = 0 \\
+			\end{align*}
+			Therefore, the characteristic equation is
+			\begin{align*}
+				\lambda^2 + 3 \lambda + 2 & = 0
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\lambda_1 & = -1 \\
+				\lambda_2 & = -2
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				{y_h}_1(t)               & = A e^{-t} + B e^{-2 t} \\
+				\therefore {{y_h}_1}'(t) & = -A e^{-t} - 2 B e^{-2 t}
+			\end{align*}
+			Substituting the initial conditions,
+			\begin{align*}
+				2 & = A + B \\
+				1 & = -A - 2 B
+			\end{align*}
+			Therefore, solving,
+			\begin{align*}
+				A & = 5 \\
+				B & = -3
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				{y_h}_1(t) & = 5 e^{-t} - 3 e^{-2 t}
+			\end{align*}
+			As $g_1(t)$ is the impulse response,
+			\begin{align*}
+				{y_p}_1(t) & = g_1(t) \ast u(t)                                                     \\
+                                           & = \int\limits_{0}^{t} g_1(t) u(t - \tau)                               \\
+                                           & = \int\limits_{0}^{t} \left( e^{-\tau} + e^{-2 \tau} \right) \dif \tau \\
+                                           & = -e^{-t} - \frac{1}{2} e^{-2 t} + \frac{3}{2}
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				y_1(t) & = {y_h}_1(t) + {y_p}_1(t) \\
+                                       & = \left( e 3^{-t} - \frac{7}{2} e^{-2 t} + \frac{3}{2} \right) \delta_{-1}(t)
+			\end{align*}
+		\item
+			\begin{align*}
+				{y_p}_2(t) & = \left( -2 + e^{-t} + e^{-4 t} + t e^{-4 t} \right) \delta_{-1}(t)
+			\end{align*}
+			Therefore, as the impulse response is the derivative of the particular solution part of the step response,
+			\begin{align*}
+				g_2(t) & = \dod{}{t}\left( -2 + e^{-t} + e^{-4 t} + t e^{-4 t} \right) \delta_{-1}(t) \\
+                                       & = \left( -e^{-t} - 3 e^{-4 t} - 4 t e^{-4 t} \right) \delta_{-1}(t)
+			\end{align*}
+		\item
+			\begin{align*}
+				g_2(t) & = \left( -e^{-t} - 3 e^{-4 t} - 4 t e^{-4 t} \right) \delta_{-1}(t)
+			\end{align*}
+			Therefore,
+			\begin{align*}
+				\lambda_1 & = -1 \\
+				\lambda_2 & = -4 \\
+				\lambda_3 & = -4
+			\end{align*}
+			Therefore, the characteristic equation is
+			\begin{align*}
+				(\lambda + 1) (\lambda + 4)^2                        & = 0 \\
+				\therefore \lambda^3 + 9 \lambda^2 + 24 \lambda + 16 & = 0
+			\end{align*}
+			Therefore, the homogeneous ODE is
+			\begin{align*}
+				y'''(t) + 9 y''(t) + 24 y'(t) + 16 y(t) & = 0
+			\end{align*}
+			Therefore, the homogeneous solution is
+			\begin{align*}
+				y_h(t)                & = A e^{-t} + B e^{-4 t} + C t e^{-4 t}            \\
+				\therefore {y_h}'(t)  & = -A e^{-t} + (C - 4 B) e^{-4 t} - 4 C t e^{-4 t} \\
+				\therefore {y_h}''(t) & = A e^{-t} + (16 B - 8 C) e^{-4 t} + 16 t e^{-4 t}
+			\end{align*}
+			Substituting the initial conditions,
+			\begin{align*}
+				2 & = A + B        \\
+				3 & = -A + C - 4 B \\
+				1 & = A + 16 B - 8 C
+			\end{align*}
+			Therefore, solving,
+			\begin{align*}
+				A & = \frac{19}{3}  \\
+				B & = -\frac{13}{3} \\
+				C & = -8
+			\end{align*}
+			Therefore, the homogeneous solution is
+			\begin{align*}
+				{y_h}_2(t) & = \left( \frac{19}{3} e^{-t} - \frac{13}{3} e^{-4 t} - 8 t e^{-4 t} \right) \delta_{-1}(t)
+			\end{align*}
+	\end{enumerate}
+\end{solution}
+
+\end{document}
