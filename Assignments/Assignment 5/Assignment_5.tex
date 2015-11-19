@@ -1,0 +1,192 @@
+\documentclass[fleqn, a4paper, 11pt, oneside]{amsart}
+%\usepackage[top = 2cm, bottom = 1cm, left = 1cm, right = 1cm]{geometry}
+\usepackage{exsheets, tasks}
+\usepackage{amsmath, amssymb, amsthm} %standard AMS packages
+\usepackage{marginnote} %marginnotes
+\usepackage{gensymb} %miscellaneous symbols
+\usepackage{commath} %differential symbols
+\usepackage{xcolor} %colours
+\usepackage{cancel} %cancelling terms
+\usepackage[free-standing-units, space-before-unit]{siunitx} %formatting units
+\usepackage{tikz, pgfplots} %diagrams
+\usetikzlibrary{calc, hobby, patterns, intersections, decorations.markings}
+\usepackage{graphicx} %inserting graphics
+\usepackage{hyperref} %hyperlinks
+\usepackage{datetime} %date and time
+\usepackage{ulem} %underline for \emph{}
+\usepackage{xfrac} %inline fractions
+\usepackage{enumerate,enumitem} %numbered lists
+\usepackage{float} %inserting floats
+\usepackage{circuitikz}[american voltages, american currents] %circuit diagrams
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}} %adds numbers to specific equations in non-numbered list of equations
+
+\newcommand{\AxisRotator}[1][rotate=0]{
+	\tikz [x=0.25cm,y=0.60cm,line width=.2ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+} %rotation symbols on axes
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\curl}{\mathrm{curl\,}}
+
+\makeatletter
+\@addtoreset{section}{part} %resets section numbers in new part
+\makeatother
+
+\renewcommand{\thesubsection}{(\arabic{subsection})}
+\renewcommand{\thesection}{(\arabic{section})}
+
+%section headings on left
+\makeatletter
+\def\specialsection{\@startsection{section}{1}%
+	\z@{\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\centering}}% DELETED
+	{\normalfont}}% NEW
+\def\section{\@startsection{section}{1}%
+	\z@{.7\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\scshape\centering}}% DELETED
+	{\normalfont\scshape}}% NEW
+\makeatother
+
+%forces newline after subsection
+\makeatletter
+\def\subsection{\@startsection{subsection}{3}%
+	\z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+	{\normalfont\itshape}}
+\makeatother
+
+\settasks{counter-format = tsk[1].}
+
+\SetupExSheets{solution/print = true}
+
+%opening
+\title{Introduction to Linear Systems : Assignment 5a}
+\author
+{
+	Aakash Jog\\
+	ID : 989323563
+}
+\date{\formatdate{19}{11}{2015}}
+
+\begin{document}
+
+\tikzset{->-/.style={decoration={
+  markings,
+  mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
+
+\maketitle
+%\setlength{\mathindent}{0pt}
+
+\begin{question}
+	A mass $M_1$ is placed on a dashpot having a damping coefficient $B_1$.
+	The dashpot at its other side is connected to a mass $M_2$.
+	The latter is lying on a dashpot with damping coefficient $B_2$.
+	The system is situated in a gravity field $g$.
+	\begin{enumerate}
+		\item
+			Draw an equivalent electrical diagram and write a set of differential equations of order 1, for the velocities $v_1$, $v_2$ of the two masses.
+		\item
+			Arrange your above solution in a state space presentation with the state vector
+			\begin{align*}
+				x(t) &=
+					\begin{pmatrix}
+						v_1 \\
+						v_2 \\
+					\end{pmatrix}
+			\end{align*}
+		\item
+			Find the suitable output matrix $C$ for the following cases.
+			\begin{enumerate}
+				\item The output of the system is the average of the two velocities.
+				\item The output of the system is the difference between the two velocities.
+			\end{enumerate}
+	\end{enumerate}
+\end{question}
+
+\begin{solution}
+	\begin{enumerate}[leftmargin=*]
+		\item
+			\begin{figure}[H]
+				\centering
+				\begin{circuitikz}
+					\draw (0,0) to [american current source = $m_1 g$] (0,4);
+					\draw (2,0) to [C = $m_1$] (2,4);
+					\draw (4,0) to [C = $m_1$] (4,4);
+					\draw (6,0) to [american current source = $m_2 g$] (6,4);
+					\draw (8,0) to [R = $\frac{1}{B_2}$] (8,4);
+
+					\draw (0,4) to (2,4);
+					\draw (2,4) to [R = $\frac{1}{B_1}$] (4,4);
+					\draw (4,4) to (8,4);
+
+					\draw (0,0) to (8,0);
+
+					\draw (4,0) node [ground] {};
+				\end{circuitikz}
+			\end{figure}
+			\begin{align*}
+				{v_1}' & = -\frac{B_1}{m_1} v_1 + \frac{B_1}{m_1} v_2 + g \\
+				{v_2}' & = \frac{B_2}{m_2} v_1 - \frac{B_1 + B_2}{m_2} v_2 + g
+			\end{align*}
+		\item
+			\begin{align*}
+				{v_1}' & = -\frac{B_1}{m_1} v_1 + \frac{B_1}{m_1} v_2 + g \\
+				{v_2}' & = \frac{B_2}{m_2} v_1 - \frac{B_1 + B_2}{m_2} v_2 + g
+			\end{align*}
+			Therefore,
+			\begin{align*}
+					\begin{pmatrix}
+						{v_1}' \\
+						{v_2}' \\
+					\end{pmatrix}
+				&=
+					\begin{pmatrix}
+						-\frac{B_1}{m_1} & \frac{B_1}{m_2}        \\
+						\frac{B_2}{m_2}  & -\frac{B_1 + B_2}{m_2} \\
+					\end{pmatrix}
+					\begin{pmatrix}
+						v_1 \\
+						v_2 \\
+					\end{pmatrix}
+				+
+					\begin{pmatrix}
+						1 \\
+						1 \\
+					\end{pmatrix}
+					g
+			\end{align*}
+		\item
+			\begin{enumerate}[leftmargin=*]
+				\item
+					\begin{align*}
+						C &=
+							\begin{pmatrix}
+								\frac{1}{2} & \frac{1}{2} \\
+							\end{pmatrix}
+					\end{align*}
+				\item
+					If $v_1 \ge v_2$,
+					\begin{align*}
+						C &=
+							\begin{pmatrix}
+								1 & -1 \\
+							\end{pmatrix}
+					\end{align*}
+				\item
+					If $v_2 \ge v_1$,
+					\begin{align*}
+						C &=
+							\begin{pmatrix}
+								-1 & 1 \\
+							\end{pmatrix}
+					\end{align*}
+			\end{enumerate}
+	\end{enumerate}
+\end{solution}
+
+\end{document}
