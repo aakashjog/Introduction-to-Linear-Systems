@@ -1,0 +1,154 @@
+\documentclass[fleqn, a4paper, 11pt, oneside]{amsart}
+%\usepackage[top = 2cm, bottom = 1cm, left = 1cm, right = 1cm]{geometry}
+\usepackage{exsheets, tasks}
+\usepackage{amsmath, amssymb, amsthm} %standard AMS packages
+\usepackage{marginnote} %marginnotes
+\usepackage{gensymb} %miscellaneous symbols
+\usepackage{commath} %differential symbols
+\usepackage{xcolor} %colours
+\usepackage{cancel} %cancelling terms
+\usepackage[free-standing-units, space-before-unit]{siunitx} %formatting units
+\usepackage{tikz, pgfplots} %diagrams
+\usetikzlibrary{calc, hobby, patterns, intersections, decorations.markings}
+\usepackage{graphicx} %inserting graphics
+\usepackage{hyperref} %hyperlinks
+\usepackage{datetime} %date and time
+\usepackage{ulem} %underline for \emph{}
+\usepackage{xfrac} %inline fractions
+\usepackage{enumerate,enumitem} %numbered lists
+\usepackage{float} %inserting floats
+\usepackage{circuitikz}[american voltages, american currents] %circuit diagrams
+
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}} %adds numbers to specific equations in non-numbered list of equations
+
+\newcommand{\AxisRotator}[1][rotate=0]{
+	\tikz [x=0.25cm,y=0.60cm,line width=.2ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+} %rotation symbols on axes
+
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+
+\theoremstyle{theorem}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\curl}{\mathrm{curl\,}}
+
+\makeatletter
+\@addtoreset{section}{part} %resets section numbers in new part
+\makeatother
+
+\renewcommand{\thesubsection}{(\arabic{subsection})}
+\renewcommand{\thesection}{(\arabic{section})}
+
+%section headings on left
+\makeatletter
+\def\specialsection{\@startsection{section}{1}%
+	\z@{\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\centering}}% DELETED
+	{\normalfont}}% NEW
+\def\section{\@startsection{section}{1}%
+	\z@{.7\linespacing\@plus\linespacing}{.5\linespacing}%
+	%  {\normalfont\scshape\centering}}% DELETED
+	{\normalfont\scshape}}% NEW
+\makeatother
+
+%forces newline after subsection
+\makeatletter
+\def\subsection{\@startsection{subsection}{3}%
+	\z@{.5\linespacing\@plus.7\linespacing}{.1\linespacing}%
+	{\normalfont\itshape}}
+\makeatother
+
+\settasks{counter-format = tsk[1].}
+
+\SetupExSheets{solution/print = true}
+
+%opening
+\title{Introduction to Linear Systems : Assignment 4}
+\author
+{
+	Aakash Jog\\
+	ID : 989323563
+}
+\date{\formatdate{12}{11}{2015}}
+
+\begin{document}
+
+\tikzset{->-/.style={decoration={
+  markings,
+  mark=at position #1 with {\arrow{>}}},postaction={decorate}}}
+
+\maketitle
+%\setlength{\mathindent}{0pt}
+
+\begin{question}
+	Consider the system in the following illustration.
+	\begin{figure}[H]
+		\centering
+	\end{figure}<++>
+	The positive direction is in the direction of the moment $\tau$ that operates on the system.
+	The torsional stiffness $k_2$ operates between $B_1$ and $B_2$ only.
+	The segment between $B_2$ and $B_3$ is completely stiff.\\
+	A torsional damping with damping coefficient $B_1$ is located next to the moment of inertia $J_1$.
+	\begin{enumerate}
+		\item Draw an equivalent electrical diagram, and mark the angular velocity $\omega_1$ of the moment of inertia $J_1$, and the angular velocity $\omega_2$ of the stiff axle between $B_2$ and $B_3$.
+		\item Write the matrix set of equations using Kirchoff's Junction Rule.
+		\item Find the transfer function between the angular velocity $\omega_1$ of the moment of inertia $J_1$ and the moment $\tau$ that operates on the system.
+	\end{enumerate}
+\end{question}
+
+\begin{solution}
+	\begin{enumerate}[leftmargin=*]
+		\item
+			~\\
+			\begin{figure}[H]
+				\centering
+				\begin{circuitikz}
+					\draw (0,0) to [R = $\frac{1}{B_3}$] (0,4);
+					\draw (2,0) to [american current source = $T$] (2,4);
+					\draw (4,0) to [R = $\frac{1}{B_2}$] (4,4);
+					\draw (6,0) to [R = $\frac{1}{B_1}$] (6,4);
+					\draw (8,0) to [C = $J_1$] (8,4);
+					\draw (10,0) to (10,4);
+					
+					\draw (0,4) to (4,4);
+					\draw (4,4) to [L = $\frac{1}{k_2}$] (6,4);
+					\draw (6,4) to (8,4);
+					\draw (8,4) to [L = $\frac{1}{k_1}$] (10,4);
+
+					\draw (0,0) to (10,0);
+
+					\draw (5,0) node [ground] {};
+
+					\filldraw (2,4) circle (1pt) node [above] {$\omega_2$};
+					\filldraw (8,4) circle (1pt) node [above] {$\omega_1$};
+				\end{circuitikz}
+			\end{figure}
+		\item
+			\begin{align*}
+					\begin{pmatrix}
+						\frac{k_1}{s} + \frac{k_2}{s} + B_1 + s J_1 & \frac{-k_2}{s}\\
+						-\frac{k_2}{s} & \frac{k_2}{s} + B_2 + B_3\\
+					\end{pmatrix}
+					\begin{pmatrix}
+						\omega_1(s)\\
+						\omega_2(s)\\
+					\end{pmatrix}
+				&=
+					\begin{pmatrix}
+						0\\
+						\tau(s)\\
+					\end{pmatrix}
+			\end{align*}
+		\item
+			By Cramer's Rule,
+			\begin{align*}
+				\omega_1(s) &= \frac{(0) \left( \frac{k_2}{s} + B_2 + B_3 \right) + \tau(s) \left( \frac{k_2}{s} \right)}{\left( \frac{k_1}{s} + \frac{k_2}{s} + B_1 + s J_1 \right) \left( \frac{k_2}{s} + B_2 + B_3 \right) - \left( \frac{k_2}{s} \right)^2}\\
+				\therefore \frac{\omega_1(s)}{\tau(s)} &= 
+				\frac{\frac{k_2}{s}}{\left( \frac{k_1}{s} + \frac{k_2}{s} + B_1 + s J_1 \right) \left( \frac{k_2}{s} + B_2 + B_3 \right) - \left( \frac{k_2}{s} \right)^2}\\
+			\end{align*}
+	\end{enumerate}
+\end{solution}
+
+\end{document}
